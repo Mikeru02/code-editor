@@ -4,6 +4,7 @@ from tkinter import ttk
 
 import tkinter as tk
 import threading
+import os
 
 class App(tk.Tk):
     # Intitalization of tk
@@ -12,7 +13,6 @@ class App(tk.Tk):
         self.mutex = threading.Lock()
         self.code_name = "main"
         self.file = "samples/main.py"
-        self.file_content = self.__load_file()
         self.is_typing = False
         self.timer = None
 
@@ -51,9 +51,13 @@ class App(tk.Tk):
         
         self.code_editor.pack(fill=tk.BOTH, expand=True)
         self.code_editor.content= self.__load_file()
-
-        
         self.code_editor.bind("<KeyRelease>", self.__on_key_release)
+
+        termf = tk.Frame(self.main_frame, height=400, width=500)
+
+        termf.pack(fill=tk.BOTH, expand=tk.YES)
+        wid = termf.winfo_id()
+        os.system('xterm -into %d -geometry 40x20 -sb &' % wid)
 
     def __load_file(self) -> str:
         try:
